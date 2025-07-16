@@ -1,0 +1,23 @@
+name: Download bcbio Container
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download-and-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull bcbio image from Quay.io
+        run: docker pull quay.io/biocontainers/bcbio:latest
+
+      - name: Save Docker image to a tarball
+        run: docker save -o bcbio.tar quay.io/biocontainers/bcbio:latest
+
+      - name: Compress the tarball
+        run: gzip bcbio.tar
+
+      - name: Upload artifact for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: bcbio-container-archive
+          path: bcbio.tar.gz
