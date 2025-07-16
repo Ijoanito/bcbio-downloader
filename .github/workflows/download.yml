@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Pull bcbio image from Docker Hub
-        run: docker pull biocontainers/bcbio:latest
+        run: docker pull biocontainers/bcbio:v1.2.9--hdfd78af_0
 
       - name: Save Docker image to a tarball
-        run: docker save -o bcbio.tar biocontainers/bcbio:latest
+        run: docker save -o bcbio.tar biocontainers/bcbio:v1.2.9--hdfd78af_0
 
       - name: Compress the tarball
         run: gzip bcbio.tar
