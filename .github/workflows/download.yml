@@ -7,18 +7,11 @@ jobs:
   download-and-package:
     runs-on: ubuntu-latest
     steps:
-      - name: Log in to Quay.io
-        uses: docker/login-action@v3
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USER }}
-          password: ${{ secrets.QUAY_TOKEN }}
-
-      - name: Pull bcbio image from Quay.io
-        run: docker pull quay.io/biocontainers/bcbio:latest
+      - name: Pull bcbio image from Docker Hub
+        run: docker pull biocontainers/bcbio:latest
 
       - name: Save Docker image to a tarball
-        run: docker save -o bcbio.tar quay.io/biocontainers/bcbio:latest
+        run: docker save -o bcbio.tar biocontainers/bcbio:latest
 
       - name: Compress the tarball
         run: gzip bcbio.tar
