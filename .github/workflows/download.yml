@@ -1,17 +1,25 @@
-name: Download bcbio Container
+name: Build and Package bcbio Container
 
 on:
   workflow_dispatch:
 
 jobs:
-  download-and-package:
+  build-and-package:
+    # Give the job more time, as building is slow (up to 6 hours)
+    timeout-minutes: 360
     runs-on: ubuntu-latest
     steps:
-      - name: Pull bcbio image from Docker Hub
-        run: docker pull biocontainers/bcbio:v1.2.9--hdfd78af_0
+      - name: Check out bcbio Dockerfile repository
+        uses: actions/checkout@v4
+        with:
+          repository: bcbio/bcbio_docker
+          path: bcbio_docker
+
+      - name: Build bcbio-vc Docker image from source
+        run: docker build -t bcbio-vc:local ./bcbio_docker/bcbio-vc/
 
       - name: Save Docker image to a tarball
-        run: docker save -o bcbio.tar biocontainers/bcbio:v1.2.9--hdfd78af_0
+        run: docker save -o bcbio.tar bcbio-vc:local
 
       - name: Compress the tarball
         run: gzip bcbio.tar
